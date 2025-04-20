@@ -76,7 +76,7 @@ struct HistoryPanel: View {
     // Enhanced clipboard items view with better visuals and keyboard navigation
     private var enhancedClipboardItems: some View {
         ScrollViewReader { proxy in
-            ScrollView {
+            ScrollView() {
                 LazyVStack(spacing: 0) {
                     if viewModel.items.isEmpty {
                         enhancedEmptyState
