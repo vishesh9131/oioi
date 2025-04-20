@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		502B9B902DB3A4ED002B7930 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 502B9B8F2DB3A4ED002B7930 /* KeyboardShortcuts */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		502B9B3A2DB38E7A002B7930 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -45,6 +49,16 @@
 			path = oioiUITests;
 			sourceTree = "<group>";
 		};
+		502B9B792DB391D7002B7930 /* Tests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		502B9B7A2DB391E4002B7930 /* Preview Content */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				502B9B902DB3A4ED002B7930 /* KeyboardShortcuts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +90,8 @@
 		502B9B222DB38E73002B7930 = {
 			isa = PBXGroup;
 			children = (
+				502B9B792DB391D7002B7930 /* Tests */,
+				502B9B7A2DB391E4002B7930 /* Preview Content */,
 				502B9B2D2DB38E73002B7930 /* oioi */,
 				502B9B3C2DB38E7A002B7930 /* oioiTests */,
 				502B9B462DB38E7A002B7930 /* oioiUITests */,
@@ -109,9 +126,12 @@
 			);
 			fileSystemSynchronizedGroups = (
 				502B9B2D2DB38E73002B7930 /* oioi */,
+				502B9B792DB391D7002B7930 /* Tests */,
+				502B9B7A2DB391E4002B7930 /* Preview Content */,
 			);
 			name = oioi;
 			packageProductDependencies = (
+				502B9B8F2DB3A4ED002B7930 /* KeyboardShortcuts */,
 			);
 			productName = oioi;
 			productReference = 502B9B2B2DB38E73002B7930 /* oioi.app */;
@@ -195,6 +215,9 @@
 			);
 			mainGroup = 502B9B222DB38E73002B7930;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				502B9B8E2DB3A4ED002B7930 /* XCLocalSwiftPackageReference "../../../Downloads/KeyboardShortcuts-main" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 502B9B2C2DB38E73002B7930 /* Products */;
 			projectDirPath = "";
@@ -273,6 +296,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -336,6 +361,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -390,14 +417,17 @@
 		502B9B4E2DB38E7A002B7930 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = oioi;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = oioi/oioi.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = oioi;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -415,14 +445,17 @@
 		502B9B4F2DB38E7A002B7930 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = oioi;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = oioi/oioi.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = oioi;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -541,6 +574,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		502B9B8E2DB3A4ED002B7930 /* XCLocalSwiftPackageReference "../../../Downloads/KeyboardShortcuts-main" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../../Downloads/KeyboardShortcuts-main";
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		502B9B8F2DB3A4ED002B7930 /* KeyboardShortcuts */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KeyboardShortcuts;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 502B9B232DB38E73002B7930 /* Project object */;
 }

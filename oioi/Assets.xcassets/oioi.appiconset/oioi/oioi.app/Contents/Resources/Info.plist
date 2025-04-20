@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>LSUIElement</key>
+    <true/>
+    <key>NSAppleEventsUsageDescription</key>
+    <string>oioi needs access to monitor clipboard and handle keyboard shortcuts</string>
+    <key>NSPrincipalClass</key>
+    <string>NSApplication</string>
+    <key>NSSupportsAutomaticTermination</key>
+    <true/>
+    <key>CFBundleURLTypes</key>
+    <array/>
+    <key>NSAccessibilityUsageDescription</key>
+    <string>oioi needs accessibility access to monitor clipboard and handle keyboard shortcuts</string>
+</dict>
+</plist> 
