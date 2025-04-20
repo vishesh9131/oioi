@@ -43,7 +43,59 @@ class HistoryViewModel: ObservableObject {
         
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
-        pasteboard.setString(item.content, forType: .string)
+        
+        // Set pasteboard content based on item type
+        var success = false
+        switch item.dataType {
+        case .text(let string):
+            print("Attempting to copy text to clipboard...")
+            success = pasteboard.setString(string, forType: .string)
+            if success { print("Successfully copied text.") }
+            
+        case .image(let data):
+            print("Attempting to copy image data to clipboard...")
+            // Provide data in common formats applications might look for.
+            // Create an NSImage object first to potentially get better type handling.
+            if let image = NSImage(data: data) {
+                 // NSPasteboardWriting protocol works well here
+                 success = pasteboard.writeObjects([image])
+                 if success { 
+                      print("Successfully copied image using NSImage.") 
+                 } else {
+                      // Fallback: Try writing raw data with common types
+                      print("NSImage write failed, falling back to raw data...")
+                      // Order matters, some apps prefer specific types
+                      if pasteboard.setData(data, forType: .tiff) { success = true }
+                      if pasteboard.setData(data, forType: .png) { success = true } // Add data even if TIFF succeeded
+                 }
+            } else {
+                 print("Error: Could not create NSImage from stored data.")
+            }
+             if success { print("Image data copy attempt finished (success=\(success)).") }
+
+        case .fileURLs(let urls):
+            print("Attempting to copy file URLs to clipboard...")
+            // Make sure the URLs are file URLs
+            let fileURLs = urls.filter { $0.isFileURL }
+            if !fileURLs.isEmpty {
+                // Cast URL to NSURL for NSPasteboardWriting conformance
+                let nsURLs = fileURLs.map { $0 as NSURL } 
+                success = pasteboard.writeObjects(nsURLs)
+                if success { print("Successfully copied \(fileURLs.count) file URL(s).") }
+            } else {
+                 print("Error: No valid file URLs found in the item.")
+            }
+        }
+        
+        // Only proceed with feedback/closing if copy was successful
+        guard success else {
+             print("Error: Failed to write item of type \(item.dataType) to pasteboard.")
+             // Resume monitoring even if copy failed
+             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { // Short delay
+                  ClipboardManager.shared.resumeMonitoring()
+             }
+             return
+        }
         
         // Haptic feedback
         NSHapticFeedbackManager.defaultPerformer.perform(.generic, performanceTime: .default)

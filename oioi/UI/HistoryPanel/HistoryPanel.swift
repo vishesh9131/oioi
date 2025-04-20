@@ -14,13 +14,18 @@ struct HistoryPanel: View {
     // Keyboard navigation
     @State private var keyboardNavigationEnabled = false
     
+    // State for entry animation
+    @State private var showContent = false
+    
     var body: some View {
         ZStack(alignment: .topLeading) {
         VStack(spacing: 0) {
                 // Search bar removed
                 
-                // Clipboard content area
+                // Clipboard content area - apply animation modifiers
                 enhancedClipboardItems
+                    .opacity(showContent ? 1 : 0)
+                    .offset(y: showContent ? 0 : 20) // Start slightly lower
                 
                 // Footer with app name
                 footer
@@ -55,6 +60,13 @@ struct HistoryPanel: View {
         .onAppear {
             // Enable keyboard navigation by default
             keyboardNavigationEnabled = true
+            
+            // Trigger the content animation shortly after the panel appears
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { // Small delay
+                 withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                      showContent = true
+                 }
+            }
         }
         .onKeyDown { key in
             handleKeyDown(key)
@@ -92,9 +104,9 @@ struct HistoryPanel: View {
                                         }
                                     }
                                 }
-                    .onTapGesture {
+                                .onTapGesture {
                                     withAnimation(.spring()) {
-                        viewModel.copyToClipboard(item)
+                                        viewModel.copyToClipboard(item)
                                     }
                                 }
                                 .transition(
@@ -106,7 +118,8 @@ struct HistoryPanel: View {
                                     )
                                 )
                                 .padding(.vertical, 6)
-                                
+                                .padding(.horizontal, 12)
+
                                 // Add divider if not the last item
                                 if index < viewModel.items.count - 1 {
                                     Divider()
@@ -118,7 +131,6 @@ struct HistoryPanel: View {
                         .animation(.spring(response: 0.4, dampingFraction: 0.7), value: viewModel.items.count)
                     }
                 }
-                .padding(.horizontal, 12)
                 .padding(.top, 12)
             }
             .scrollIndicators(.hidden)
@@ -162,10 +174,13 @@ struct HistoryPanel: View {
     
     // Handle keyboard navigation
     private func handleKeyDown(_ key: KeyEquivalent) {
+        print("[HistoryPanel] handleKeyDown called with key: \(key)") // Log handler entry
+        let oldIndex = selectedIndex // Store old index for comparison
         switch key {
         case .upArrow:
             selectedIndex = max(0, (selectedIndex ?? 0) - 1)
             keyboardNavigationEnabled = true
+            print("[HistoryPanel] Arrow Up. Old index: \(oldIndex ?? -1), New index: \(selectedIndex ?? -1)") // Log index change
         case .downArrow:
             if selectedIndex == nil {
                 selectedIndex = 0
@@ -173,15 +188,20 @@ struct HistoryPanel: View {
                 selectedIndex = min((viewModel.items.count - 1), (selectedIndex ?? -1) + 1)
             }
             keyboardNavigationEnabled = true
+            print("[HistoryPanel] Arrow Down. Old index: \(oldIndex ?? -1), New index: \(selectedIndex ?? -1)") // Log index change
         case .return, .space:
             if let index = selectedIndex, index < viewModel.items.count {
                 let item = viewModel.items[index]
-                            viewModel.copyToClipboard(item)
-                        }
+                print("[HistoryPanel] Return/Space pressed on index: \(index)") // Log copy action
+                viewModel.copyToClipboard(item)
+            }
         case .escape:
             keyboardNavigationEnabled = false
             selectedIndex = nil
+             print("[HistoryPanel] Escape pressed. Disabling keyboard nav, selectedIndex = nil") // Log escape
+             closePanel() // Also close panel on escape
         default:
+            print("[HistoryPanel] Unhandled key: \(key)")
             break
         }
     }
@@ -199,7 +219,7 @@ struct HistoryPanel: View {
         HStack(spacing: 12) {
             // App Logo - now with consistent color
             Text("oioi")
-                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                .font(.system(size: 18, weight: .semibold, design: .rounded))
                 .foregroundColor(colorScheme == .dark ? .white.opacity(0.9) : .black.opacity(0.9))
                 .padding(.horizontal, 10)
                 .padding(.vertical, 5)
@@ -211,12 +231,21 @@ struct HistoryPanel: View {
             Spacer()
             
             // Keyboard shortcuts reminder
-            HStack(spacing: 10) {
-                keyboardShortcutLabel(symbol: "⌥V", text: "Open")
-                keyboardShortcutLabel(symbol: "↑↓", text: "Navigate")
-                keyboardShortcutLabel(symbol: "⏎", text: "Copy")
-            }
+            // HStack(spacing: 10) {
+            //     keyboardShortcutLabel(symbol: "⌥V", text: "Open")
+            //     keyboardShortcutLabel(symbol: "↑↓", text: "Navigate")
+            //     keyboardShortcutLabel(symbol: "⏎", text: "Copy")
+            
+            // }
+            
+            
+            
+//            Keyboard shrotcuts reminider
+//            Hstack(spacing: 10)
+//                keyboardShortcutLabel(symbol: v, text: <#T##String#>) h
         }
+        
+        
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
         .background(Color.clear)
@@ -278,7 +307,8 @@ struct KeyHandlingView: NSViewRepresentable {
     func makeNSView(context: Context) -> NSView {
         let view = KeyHandlingNSView()
         view.onKeyDown = onKeyDown
-        DispatchQueue.main.async {
+        // Delay making first responder slightly to ensure window is ready
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
             view.window?.makeFirstResponder(view)
         }
         return view
@@ -296,10 +326,15 @@ struct KeyHandlingView: NSViewRepresentable {
         override var acceptsFirstResponder: Bool { true }
         
         override func keyDown(with event: NSEvent) {
+            print("[KeyHandlingNSView] keyDown captured. Characters: \(event.charactersIgnoringModifiers ?? "nil"), KeyCode: \(event.keyCode)") // Log captured event
             if let key = KeyEquivalent(rawValue: event.charactersIgnoringModifiers ?? "") {
+                print("[KeyHandlingNSView] Calling onKeyDown closure with: \(key)")
                 onKeyDown?(key)
+            } else {
+                 print("[KeyHandlingNSView] Could not create KeyEquivalent from characters.")
             }
-            super.keyDown(with: event)
+            // Don't call super, as it might trigger system beep for unhandled keys
+            // super.keyDown(with: event)
         }
     }
 }
@@ -443,37 +478,76 @@ struct EnhancedClipboardItemView: View {
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
-        HStack(spacing: 14) {
-            // Content stack
+        HStack(alignment: .center, spacing: 12) { // Align items center vertically
+            // Item Type Icon
+            itemIconView
+                 .frame(width: 28, height: 28) // Give icon a consistent frame
+                 .padding(.leading, 2) // Add slight padding
+
+            // Content stack (Text/Image Preview/File Info)
             contentStack
-            
+
             Spacer()
-            
+
             // Copy button
             copyButton
         }
-        .padding(.vertical, 12)
+        .padding(.vertical, 10) // Adjusted padding
         .padding(.horizontal, 14)
         .background(backgroundShape)
         .contentShape(Rectangle())
     }
-    
-    // Break down complex parts into separate computed properties
+
+    // View for the leading icon based on item type
+    @ViewBuilder
+    private var itemIconView: some View {
+         // Use the pre-computed displayIcon from ClipboardItem
+         Image(nsImage: item.displayIcon)
+              .resizable()
+              .aspectRatio(contentMode: .fit)
+              .foregroundColor(isSelected ? .primary : .secondary) // Adjust color based on selection
+    }
+
+    // Updated content stack to show previews
     private var contentStack: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(item.content)
-                .font(.system(size: 18))
-                .lineLimit(2)
-                .truncationMode(.middle)
-                .foregroundColor(contentTextColor)
-            
-            // Only show timestamp if needed
+            Group {
+                switch item.dataType {
+                case .text(let text):
+                    Text(text)
+                        .lineLimit(3)
+                        .truncationMode(.tail)
+                case .image(let data):
+                     if let nsImage = NSImage(data: data) {
+                          Image(nsImage: nsImage)
+                               .resizable()
+                               .aspectRatio(contentMode: .fit)
+                               .frame(maxHeight: 40) // Limit thumbnail height
+                               .cornerRadius(4)
+                     } else {
+                          Text("[Image Data Error]")
+                     }
+                case .fileURLs(let urls):
+                    // Display filename for single file, count for multiple
+                    if urls.count == 1, let name = urls.first?.lastPathComponent {
+                         Text(name)
+                              .lineLimit(2)
+                              .truncationMode(.head) // Show beginning of long filenames
+                    } else {
+                         Text("\(urls.count) Files")
+                    }
+                }
+            }
+            .font(.system(size: 16)) // Slightly smaller font for content
+            .foregroundColor(contentTextColor)
+
+            // Timestamp (conditionally shown)
             if isSelected || isHovered || isLastCopied {
                 timeStampView
             }
         }
     }
-    
+
     private var contentTextColor: Color {
         if isSelected || isLastCopied {
             return colorScheme == .dark ? .white : .black
@@ -512,8 +586,8 @@ struct EnhancedClipboardItemView: View {
                         .foregroundColor(.green)
                         .transition(.scale.combined(with: .opacity))
                 } else {
-                    // Show copy icon
-                    Image(systemName: "doc.on.doc")
+                    // Show appropriate copy icon based on type
+                    Image(systemName: copyIconName)
                         .font(.system(size: 14))
                         .foregroundColor(.secondary)
                         .transition(.scale.combined(with: .opacity))
@@ -523,6 +597,15 @@ struct EnhancedClipboardItemView: View {
         }
         .scaleEffect(isSelected || isHovered ? 1.05 : 1.0)
         .animation(.spring(response: 0.3), value: isSelected || isHovered)
+    }
+    
+    // Determine copy icon based on item type
+    private var copyIconName: String {
+        switch item.dataType {
+        case .text: return "doc.on.doc"
+        case .image: return "photo.on.rectangle"
+        case .fileURLs: return "folder.badge.plus" // Or another suitable icon
+        }
     }
     
     private var circleBackgroundColor: Color {
