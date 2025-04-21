@@ -89,8 +89,7 @@
 
 1. Runs automatically in background
 2. Default shortcuts (configurable):
-   - `⌘+⇧+V`: Show clipboard history
-   - `⌘+⇧+C`: Pin current clipboard item
+   - `⌥ + V`: Show clipboard history
 
 ---
 
