@@ -10,6 +10,7 @@
  <p align="center">
 <img width="60%" src="tutorial_assets/demo.gif"></a>
 </p>
+
 *No signup required - just download and start using!*
 - 🆓 100% free (no account needed) 
 - 📋 Clipboard history management
