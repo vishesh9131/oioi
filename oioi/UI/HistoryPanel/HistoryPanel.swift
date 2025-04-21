@@ -76,64 +76,61 @@ struct HistoryPanel: View {
     // Enhanced clipboard items view with better visuals and keyboard navigation
     private var enhancedClipboardItems: some View {
         ScrollViewReader { proxy in
-            ScrollView() {
-                LazyVStack(spacing: 0) {
-                    if viewModel.items.isEmpty {
-                        enhancedEmptyState
-                    } else {
-                        ForEach(Array(viewModel.items.enumerated()), id: \.element.id) { index, item in
-                            VStack(spacing: 0) {
-                                EnhancedClipboardItemView(
-                                    item: item,
-                                    viewModel: viewModel,
-                                    isLastCopied: viewModel.lastCopiedId == item.id,
-                                    isSelected: selectedIndex == index,
-                                    isHovered: hoveredItemID == item.id
-                                )
-                                .id(item.id)
-                                .onHover { isHovered in
-                                    if isHovered {
-                                        hoveredItemID = item.id
-                                        if hoveredItemID == item.id {
-                                            NSCursor.pointingHand.push()
-                                        }
-                                    } else {
-                                        if hoveredItemID == item.id {
-                                            hoveredItemID = nil
-                                            NSCursor.pop()
-                                        }
+            LazyVStack(spacing: 0) {
+                if viewModel.items.isEmpty {
+                    enhancedEmptyState
+                } else {
+                    ForEach(Array(viewModel.items.enumerated()), id: \.element.id) { index, item in
+                        VStack(spacing: 0) {
+                            EnhancedClipboardItemView(
+                                item: item,
+                                viewModel: viewModel,
+                                isLastCopied: viewModel.lastCopiedId == item.id,
+                                isSelected: selectedIndex == index,
+                                isHovered: hoveredItemID == item.id
+                            )
+                            .id(item.id)
+                            .onHover { isHovered in
+                                if isHovered {
+                                    hoveredItemID = item.id
+                                    if hoveredItemID == item.id {
+                                        NSCursor.pointingHand.push()
                                     }
-                                }
-                                .onTapGesture {
-                                    withAnimation(.spring()) {
-                                        viewModel.copyToClipboard(item)
+                                } else {
+                                    if hoveredItemID == item.id {
+                                        hoveredItemID = nil
+                                        NSCursor.pop()
                                     }
-                                }
-                                .transition(
-                                    .asymmetric(
-                                        insertion: .scale(scale: 0.8)
-                                            .combined(with: .opacity)
-                                            .combined(with: .offset(x: -20, y: 0)),
-                                        removal: .opacity.animation(.easeOut(duration: 0.2))
-                                    )
-                                )
-                                .padding(.vertical, 6)
-                                .padding(.horizontal, 12)
-
-                                // Add divider if not the last item
-                                if index < viewModel.items.count - 1 {
-                                    Divider()
-                                        .background(colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.05))
-                                        .padding(.horizontal, 14)
                                 }
                             }
+                            .onTapGesture {
+                                withAnimation(.spring()) {
+                                    viewModel.copyToClipboard(item)
+                                }
+                            }
+                            .transition(
+                                .asymmetric(
+                                    insertion: .scale(scale: 0.8)
+                                        .combined(with: .opacity)
+                                        .combined(with: .offset(x: -20, y: 0)),
+                                    removal: .opacity.animation(.easeOut(duration: 0.2))
+                                )
+                            )
+                            .padding(.vertical, 6)
+                            .padding(.horizontal, 12)
+
+                            if index < viewModel.items.count - 1 {
+                                Divider()
+                                    .background(colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.05))
+                                    .padding(.horizontal, 14)
+                            }
                         }
-                        .animation(.spring(response: 0.4, dampingFraction: 0.7), value: viewModel.items.count)
                     }
+                    .animation(.spring(response: 0.4, dampingFraction: 0.7), value: viewModel.items.count)
                 }
-                .padding(.top, 12)
             }
-            .scrollIndicators(.hidden)
+            .padding(.top, 12)
+            .customScrollBar()
             .onChange(of: selectedIndex) { index in
                 if let index = index, index < viewModel.items.count {
                     let id = viewModel.items[index].id

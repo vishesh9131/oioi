@@ -1,55 +1,51 @@
+# oioi - A free clipboard manager for macOS
+<div>
+  <p align="center">
+    <img src="tutorial_assets/0.png" width="800"> 
+  </p>
+</div>
 
-# oioi ✂️
-**A free clipboard manager for macOS**  
-*No signup required - just download and start using!*
-
-![oioi logo](screenshot1.png)  
-*Figure 1: oioi main interface*
-
----
 
 ## Features ✨
+ <p align="center">
+<img width="60%" src="tutorial_assets/demo.gif"></a>
+</p>
+*No signup required - just download and start using!*
+- 🆓 100% free (no account needed) 
 - 📋 Clipboard history management
 - ⌨️ Keyboard shortcut support
 - 🏷️ Organized by date/category
-- � Lightweight (~94MB)
-- 🆓 100% free (no account needed)
+- Time Machine for your copied items.
+
+
 
 ---
 
-## Installation ⚡
+<div align="center">
+  <img src="tutorial_assets/bw.png" width="80"> 
+  <h1>oioi Installation</h1>
+</div>
 
 ### Simple Install
-![Installer options](screenshot2.png)  
-*Figure 2: Installer context menu*
+![Installer options](tutorial_assets/1.png)  
 
-1. Download `oioi_installer.dmg`
-2. Double-click to mount
-3. Drag to Applications folder
+1. Directly Download oioi_installer.dmg from [here](https://github.com/vishesh9131/oioi/releases/download/1.0/oioi_installer.dmg)
+2. Download `oioi_installer.dmg`
+3. Double-click to mount or, right click openwith "DiskImageMounter"
 
 ---
 
 ## First Run Setup 🔐
-![Accessibility prompt](screenshot3.png)  
-*Figure 3: Permission requirement*
+![Accessibility prompt](tutorial_assets/2.png)  
 
-1. Launch oioi from Applications
-2. Grant Accessibility permissions:
-   - Click "Open System Settings"
-   - Enable oioi in Privacy → Accessibility
-3. Restart oioi
+1. In Desktop or in Finder Sidebars Loation Tab you can see oioi.
+2. click it
 
 ---
 
 ## Storage Overview 💾
-![Storage information](screenshot4.png)  
-*Figure 4: Storage usage example*
-
-- Application size: ~94MB
-- Data organized by date:
-  - Today
-  - Previous 30 Days
-  - Monthly archives
+![Storage information](tutorial_assets/3.png)  
+1. you can this window if not then click in oioi disk again...
 
 ---
 
@@ -60,6 +56,54 @@
    - `⌘+⇧+C`: Pin current clipboard item
 
 ---
+
+## Storage Overview 💾
+![Storage information](tutorial_assets/4.png)  
+
+- Drag It to Application folder.
+- give it 10 seond then safetly close this window.
+
+---
+
+## Storage Overview 💾
+![Storage information](tutorial_assets/5.png)  
+
+- Now launch it through LaunchPad
+
+---
+
+## Storage Overview 💾
+![Storage information](tutorial_assets/6.png)  
+- This pop will appear.
+- click open system settings
+- its basic acessiblity permission to listen yout macbook shortcut key.
+- (also eject the mount if you want)
+---
+
+## Storage Overview 💾
+![Storage information](tutorial_assets/7.png)  
+![Storage information](tutorial_assets/8.png)  
+
+
+- Tick the Acessiblit Permission.
+
+---
+
+## Storage Overview 💾
+![Storage information](tutorial_assets/56.png)  
+
+1. Runs automatically in background
+2. Default shortcuts (configurable):
+   - `⌘+⇧+V`: Show clipboard history
+   - `⌘+⇧+C`: Pin current clipboard item
+
+---
+
+## Storage Overview 💾
+![Storage information](tutorial_assets/10.png)  
+
+Also form  above MenuBar you can time travel with your clipbaord. 
+
 
 ## Uninstall 🗑️
 1. Quit oioi from menu bar
@@ -73,8 +117,8 @@
 
 ## Support ❓
 For help, please check:
-- [GitHub Issues](https://github.com/oioi-app/support)
-- Email: support@oioi.app
+- [GitHub Issues](https://github.com/vishesh9131/oioi/issues)
+- Email: sciencely98@gmail.com
 
 ---
 
