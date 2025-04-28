@@ -1,7 +1,7 @@
 # oioi - A free clipboard manager for macOS
 <div>
   <p align="center">
-    <img src="tutorial_assets/0.png" width="800"> 
+    <img src="tutorial_assets/banner.png" width="800"> 
   </p>
 </div>
 

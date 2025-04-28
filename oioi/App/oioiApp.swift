@@ -8,15 +8,15 @@ struct oioiApp: App {  // Changed from oldiApp to oioiApp for consistency
         // No main window scene defined here.
         // The app will run as a menu bar app only.
         // Settings can be accessed via a menu bar item if needed later.
-        MenuBarExtra("OiOi", image: "sloth_icon") { // Placeholder menu, can be customized
-            Button("Preferences...") {
-                // Action to open preferences/settings if needed
-            }
-            Divider()
-            Button("Quit oioi") {
-                NSApplication.shared.terminate(nil)
-            }
-        }
+//        MenuBarExtra("OiOi", image: "sloth_icon") { // Placeholder menu, can be customized
+//            Button("Preferences...") {
+//                // Action to open preferences/settings if needed
+//            }
+//            Divider()
+//            Button("Quit oioi") {
+//                NSApplication.shared.terminate(nil)
+//            }
+//        }
         
         // Removed the Settings scene to prevent default window
         // Settings {
