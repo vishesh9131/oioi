@@ -11,6 +11,10 @@
 <img width="60%" src="tutorial_assets/demo.gif"></a>
 </p>
 
+# Features
+<img src="tutorial_assets/bw.png" align="right"
+    width="" height="178">
+
 *No signup required - just download and start using!*
 - 🆓 100% free (no account needed) 
 - 📋 Clipboard history management
@@ -22,10 +26,10 @@
 
 ---
 
-<div align="center">
+<!-- <div align="center">
   <img src="tutorial_assets/bw.png" width="80"> 
+</div> -->
   <h1>oioi Installation</h1>
-</div>
 
 ### Simple Install
 ![Installer options](tutorial_assets/1.png)  
