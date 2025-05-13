@@ -5,15 +5,13 @@
   </p>
 </div>
 
-
 ## Features ✨
- <p align="center">
-<img width="60%" src="tutorial_assets/demo.gif"></a>
+<p align="center">
+  <img width="60%" src="tutorial_assets/demo.gif">
 </p>
 
-# Features
-<img src="tutorial_assets/bw.png" align="right"
-    width="" height="178">
+### Features
+<img src="tutorial_assets/bw.png" align="right" width="" height="178">
 
 *No signup required - just download and start using!*
 - 🆓 100% free (no account needed) 
@@ -22,90 +20,88 @@
 - 🏷️ Organized by date/category
 - Time Machine for your copied items.
 
-
-
 ---
 
 <!-- <div align="center">
   <img src="tutorial_assets/bw.png" width="80"> 
 </div> -->
-  <h1>oioi Installation</h1>
+
+## oioi Installation
 
 ### Simple Install
 ![Installer options](tutorial_assets/1.png)  
 
-1. Directly Download oioi_installer.dmg from [link](https://github.com/vishesh9131/oioi/releases/download/1.0/oioi_installer.dmg)
-2. From above link you be abe to Download `oioi_installer.dmg`
-3. Double-click to mount or, right click openwith "DiskImageMounter"
+1. Download the `oioi_installer.dmg` directly from [this link](https://github.com/vishesh9131/oioi/releases/download/1.0/oioi_installer.dmg).
+2. After downloading, double-click to mount the disk image, or right-click and choose "Open with DiskImageMounter".
 
 ---
 
 ## First Run Setup 🔐
 ![Accessibility prompt](tutorial_assets/2.png)  
 
-1. In Desktop or in Finder Sidebars Loation Tab you can see oioi.
-2. click it
+1. In the Desktop or Finder sidebar's "Locations" tab, you will see the oioi disk.
+2. Click on it.
 
 ---
 
 ## Installation window
 ![Storage information](tutorial_assets/3.png)  
-1. you can see this window if not then click in oioi disk again...
+1. If you don't see this window, click on the oioi disk again.
 
 ---
 
-
-
-## Drag!!
+## Drag It!
 ![Storage information](tutorial_assets/4.png)  
 
-- Drag It to Application folder.
-- give it 10 seond then safetly close this window.
+- Drag oioi to your Applications folder.
+- Wait for 10 seconds, then safely close this window.
 
 ---
 
-## Search the oioi
+## Search for oioi
 ![Storage information](tutorial_assets/5.png)  
 
-- Now launch it through LaunchPad
+- Now, you can launch oioi via LaunchPad.
 
 ---
 
-## trust the oioi
+## Trust oioi
 ![Storage information](tutorial_assets/6.png)  
-- This pop will appear.
-- click open system settings
-- its basic acessiblity permission to listen yout macbook shortcut key.
-- (also eject the mount if you want)
+
+- A pop-up will appear.
+- Click "Open System Settings".
+- This grants basic accessibility permissions to allow oioi to listen to your Mac's shortcut keys.
+- (You can also eject the mounted disk if you want.)
+
 ---
 
-## trust the oioi 2
+## Trust oioi 2
 ![Storage information](tutorial_assets/7.png)  
 ![Storage information](tutorial_assets/8.png)  
 
-
-- Tick the Acessiblity Permission.
+- Check the box to grant Accessibility Permission.
 
 ---
 
-## use oioi
+## Using oioi
 ![Storage information](tutorial_assets/56.png)  
 
-1. Runs automatically in background
+1. oioi runs automatically in the background.
 2. Default shortcuts (configurable):
-   - `⌥ + V`: Show clipboard history
+   - `⌥ + V`: Show clipboard history.
 
 ---
 
-## ENHANCE PRODUCTIVITY USING oioi
+## Enhance productivity using oioi
 ![Storage information](tutorial_assets/10.png)  
 
-Also form  above MenuBar you can time travel with your clipbaord. 
+From the MenuBar, you can also "time travel" with your clipboard history.
 
+---
 
 ## Uninstall oioi 🗑️
-1. Quit oioi from menu bar
-2. Drag to Trash from Applications
+1. Quit oioi from the menu bar.
+2. Drag it to the Trash from the Applications folder.
 3. Remove data folders:
    ```bash
    rm -rf ~/Library/Application\ Support/oioi
