@@ -10,7 +10,8 @@
   --logo-bg: rgba(0, 0, 0, 0.06);
   --blue: #0a84ff;
   --green: #28a745;
-  --glass-bg: rgba(255, 255, 255, 0.26);
+  --glass-rgb: 255 255 255;
+  --glass-a: 0.38; /* overridden live from the Glass frost setting */
   --glass-sheen: rgba(255, 255, 255, 0.12);
   --scroll-thumb: rgba(0, 0, 0, 0.18);
 }
@@ -27,7 +28,7 @@
     --chip-bg: rgba(255, 255, 255, 0.1);
     --logo-bg: rgba(255, 255, 255, 0.1);
     --green: #30d158;
-    --glass-bg: rgba(34, 34, 40, 0.24);
+    --glass-rgb: 34 34 40;
     --glass-sheen: rgba(255, 255, 255, 0.06);
     --scroll-thumb: rgba(255, 255, 255, 0.22);
   }
@@ -59,7 +60,7 @@ body {
      faint diagonal sheen for the "liquid glass" feel. No radius/border here —
      macOS rounds the window and a CSS one would show square corners. */
   background: linear-gradient(135deg, var(--glass-sheen), transparent 60%),
-    var(--glass-bg);
+    rgb(var(--glass-rgb) / var(--glass-a));
 }
 
 /* ---- header ---- */

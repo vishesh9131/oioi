@@ -281,13 +281,20 @@ function init(): void {
     lastCopiedId = null;
     selectedIndex = null;
     void refresh();
+    void applyGlass();
     searchInput.focus();
     searchInput.select();
   });
 
   void refresh();
+  void applyGlass();
   render();
   searchInput.focus();
+}
+
+async function applyGlass(): Promise<void> {
+  const { glassTint } = await window.oioi.getSettings();
+  document.documentElement.style.setProperty("--glass-a", String(glassTint));
 }
 
 async function refresh(): Promise<void> {
