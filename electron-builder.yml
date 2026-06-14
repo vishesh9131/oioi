@@ -1,0 +1,19 @@
+appId: com.vishesh.oioi
+productName: oioi
+copyright: Copyright © 2026 Vishesh
+directories:
+  output: release
+files:
+  - dist/**/*
+  - package.json
+mac:
+  category: public.app-category.productivity
+  icon: assets/app_icon.png
+  # No paid Developer ID — we ad-hoc sign in scripts/dist.mjs instead (free, but
+  # not notarized). identity:null tells electron-builder not to look for a cert.
+  identity: null
+  extendInfo:
+    # Menu-bar-only app: no Dock icon, no app-switcher entry.
+    LSUIElement: 1
+  target:
+    - dir

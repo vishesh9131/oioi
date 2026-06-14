@@ -1,0 +1,22 @@
+{
+  "name": "oioi-electron",
+  "version": "0.2.0",
+  "description": "oioi — a macOS clipboard manager (Electron port of the native Swift app)",
+  "main": "dist/main/main.js",
+  "author": "Vishesh",
+  "license": "MIT",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "start": "npm run build && env -u ELECTRON_RUN_AS_NODE electron .",
+    "dev": "npm run build && env -u ELECTRON_RUN_AS_NODE electron . --enable-logging",
+    "dist": "env -u ELECTRON_RUN_AS_NODE node scripts/dist.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "electron": "^31.3.1",
+    "electron-builder": "^24.13.3",
+    "esbuild": "^0.23.0",
+    "typescript": "^5.5.4"
+  }
+}

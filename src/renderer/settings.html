@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self';"
+    />
+    <title>oioi Settings</title>
+    <link rel="stylesheet" href="settings.css" />
+  </head>
+  <body>
+    <div id="settings">
+      <header class="s-header">
+        <div class="s-title">oioi</div>
+        <div class="s-sub">Clipboard manager settings</div>
+      </header>
+
+      <div class="s-body">
+        <div class="row">
+          <div class="row-text">
+            <div class="row-label">oioi is running</div>
+            <div class="row-hint">Start or stop watching the clipboard</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="monitoring" />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="row">
+          <div class="row-text">
+            <div class="row-label">Global shortcut</div>
+            <div class="row-hint" id="shortcut-hint">Opens the clipboard panel anywhere</div>
+          </div>
+          <button id="shortcut" class="shortcut-btn">⌥V</button>
+        </div>
+
+        <div class="row">
+          <div class="row-text">
+            <div class="row-label">Start at login</div>
+            <div class="row-hint">Launch oioi automatically when you log in</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="startAtLogin" />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="row">
+          <div class="row-text">
+            <div class="row-label">History size</div>
+            <div class="row-hint">Maximum items to keep (<span id="maxHistoryVal">50</span>)</div>
+          </div>
+          <input type="range" id="maxHistory" min="10" max="200" step="10" value="50" />
+        </div>
+
+        <div class="row">
+          <div class="row-text">
+            <div class="row-label">Clipboard history</div>
+            <div class="row-hint">Remove every saved item right now</div>
+          </div>
+          <button id="clear" class="btn-secondary">Clear</button>
+        </div>
+      </div>
+
+      <footer class="s-footer">
+        <div class="footer-hint" id="footer-hint"></div>
+        <button id="done" class="btn-primary">Done</button>
+      </footer>
+    </div>
+    <script src="settings.js"></script>
+  </body>
+</html>

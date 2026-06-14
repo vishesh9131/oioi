@@ -1,0 +1,195 @@
+:root {
+  --bg: #ececec;
+  --card: #ffffff;
+  --text: #1d1d1f;
+  --secondary: rgba(0, 0, 0, 0.5);
+  --border: rgba(0, 0, 0, 0.1);
+  --blue: #0a84ff;
+  --track: rgba(0, 0, 0, 0.18);
+  --btn-secondary-bg: rgba(0, 0, 0, 0.07);
+  --danger: #ff3b30;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1e1e1e;
+    --card: #2c2c2e;
+    --text: rgba(255, 255, 255, 0.92);
+    --secondary: rgba(255, 255, 255, 0.5);
+    --border: rgba(255, 255, 255, 0.12);
+    --track: rgba(255, 255, 255, 0.22);
+    --btn-secondary-bg: rgba(255, 255, 255, 0.12);
+    --danger: #ff453a;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+#settings {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.s-header {
+  padding: 28px 24px 16px;
+  text-align: center;
+}
+.s-title {
+  font-size: 26px;
+  font-weight: 700;
+}
+.s-sub {
+  font-size: 13px;
+  color: var(--secondary);
+  margin-top: 2px;
+}
+
+.s-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 16px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  background: var(--card);
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+.row-text {
+  flex: 1;
+  min-width: 0;
+}
+.row-label {
+  font-size: 14px;
+  font-weight: 500;
+}
+.row-hint {
+  font-size: 12px;
+  color: var(--secondary);
+  margin-top: 2px;
+}
+.row-hint.warn {
+  color: var(--danger);
+}
+
+/* toggle switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 25px;
+  flex-shrink: 0;
+}
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  background: var(--track);
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 21px;
+  width: 21px;
+  left: 2px;
+  top: 2px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+}
+.switch input:checked + .slider {
+  background: #34c759;
+}
+.switch input:checked + .slider::before {
+  transform: translateX(17px);
+}
+
+/* shortcut recorder */
+.shortcut-btn {
+  min-width: 84px;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--btn-secondary-bg);
+  border: 0.5px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.shortcut-btn.recording {
+  color: var(--blue);
+  border-color: var(--blue);
+  box-shadow: 0 0 0 2px rgba(10, 132, 255, 0.25);
+}
+
+/* range */
+input[type="range"] {
+  width: 140px;
+  accent-color: var(--blue);
+}
+
+.btn-secondary {
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--danger);
+  background: var(--btn-secondary-bg);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.s-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 14px 24px 22px;
+  border-top: 0.5px solid var(--border);
+}
+.footer-hint {
+  flex: 1;
+  font-size: 12px;
+  color: var(--secondary);
+}
+.btn-primary {
+  padding: 8px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--blue);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

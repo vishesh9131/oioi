@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self';"
+    />
+    <title>oioi</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header id="header">
+        <button id="close" class="traffic" title="Close" aria-label="Close"></button>
+        <div id="search-box">
+          <span id="search-icon" class="search-icon"></span>
+          <input id="search" type="text" placeholder="Search clipboard…" autocomplete="off" spellcheck="false" />
+          <button id="clear" class="clear hidden" title="Clear" aria-label="Clear search"></button>
+        </div>
+      </header>
+
+      <div id="filters">
+        <div id="type-filters" class="chip-row"></div>
+        <div class="chip-divider"></div>
+        <div id="date-filters" class="chip-row"></div>
+      </div>
+
+      <main id="list"></main>
+
+      <footer id="footer">
+        <span class="logo">oioi</span>
+      </footer>
+    </div>
+    <script src="renderer.js"></script>
+  </body>
+</html>

@@ -1,125 +1,73 @@
-# oioi - A free clipboard manager for macOS
-<div>
-  <p align="center">
-    <img src="tutorial_assets/banner.png" width="800"> 
-  </p>
-</div>
+# oioi — Electron edition
 
+An Electron port of the native macOS **oioi** clipboard manager. Runs with just
+Node — **no Xcode required**.
 
-## Features ✨
- <p align="center">
-<img width="60%" src="tutorial_assets/demo.gif"></a>
-</p>
+## Run it
 
-# Features
-<img src="tutorial_assets/bw.png" align="right"
-    width="" height="178">
+```bash
+cd electron
+npm install      # first time only (downloads Electron)
+npm start        # builds, then launches the app
+```
 
-*No signup required - just download and start using!*
-- 🆓 100% free (no account needed) 
-- 📋 Clipboard history management
-- ⌨️ Keyboard shortcut support
-- 🏷️ Organized by date/category
-- Time Machine for your copied items.
+The app lives in the **menu bar** (look for the sloth icon — there's no Dock icon
+or window on launch).
 
+- **Click the tray icon** → opens the clipboard panel below it.
+- **⌥V (Option+V)** → opens the panel next to your cursor, anywhere (the shortcut
+  is configurable in Settings).
+- **Right-click the tray icon** → menu with *Settings…*, *Clear History*, a
+  *running* toggle, and *Quit*.
 
+### Settings
 
----
+A settings window opens automatically on first launch (and any time via
+**right-click tray → Settings…**). It covers start/stop (clipboard monitoring),
+the global shortcut (click to record a new one), start-at-login, history size,
+and clearing history. Settings persist to `userData/settings.json`. **Done** is
+enabled once oioi is running and a shortcut is set.
 
-<!-- <div align="center">
-  <img src="tutorial_assets/bw.png" width="80"> 
-</div> -->
-  <h1>oioi Installation</h1>
+### In the panel
 
-### Simple Install
-![Installer options](tutorial_assets/1.png)  
+- Type in the search box to filter.
+- Click the **type** chips (All / Text / Image / Files) or **date** chips
+  (All Time / Today / Yesterday / Last 7 Days) to narrow the list.
+- **↑ / ↓** to navigate, **Enter** / **Space** to copy the selected item,
+  **Esc** to close.
+- Click any item to copy it back to the clipboard (the panel auto-closes).
 
-1. Directly Download oioi_installer.dmg from [link](https://github.com/vishesh9131/oioi/releases/download/1.0/oioi_installer.dmg)
-2. From above link you be abe to Download `oioi_installer.dmg`
-3. Double-click to mount or, right click openwith "DiskImageMounter"
+## How it maps to the Swift app
 
----
+| Swift | Electron |
+| --- | --- |
+| `ClipboardManager` (0.5s `Timer` poll) | `src/main/clipboardWatcher.ts` |
+| `HistoryManager` (max 50, dedupe, move-to-top) | `src/main/historyManager.ts` |
+| `MenuBarController` (status item + ⌥V panel) | `src/main/main.ts` (`Tray` + `BrowserWindow`) |
+| `FilterTypes.swift` | `src/shared/filters.ts` |
+| `HistoryPanel` / `HistoryViewModel` (SwiftUI) | `src/renderer/*` |
+| `NSVisualEffectView` blur | `BrowserWindow` `vibrancy: "popover"` |
 
-## First Run Setup 🔐
-![Accessibility prompt](tutorial_assets/2.png)  
+## Known differences / limitations
 
-1. In Desktop or in Finder Sidebars Loation Tab you can see oioi.
-2. click it
+- **Change detection:** Electron exposes no pasteboard `changeCount`, so the
+  watcher polls and compares a content signature. Copying two *different* images
+  with identical dimensions back-to-back is the one edge case it can miss.
+- **File paste-back is best-effort.** Re-copying a *file* item writes both an
+  `NSFilenamesPboardType` plist and a plain-text path fallback; pasting into
+  Finder may not behave identically to the native app.
+- **No haptic feedback** (no Electron equivalent).
+- History is **in-memory only** (same as the Swift app — nothing is persisted to
+  disk).
 
----
+## Project layout
 
-## Installation window
-![Storage information](tutorial_assets/3.png)  
-1. you can see this window if not then click in oioi disk again...
-
----
-
-
-
-## Drag!!
-![Storage information](tutorial_assets/4.png)  
-
-- Drag It to Application folder.
-- give it 10 seond then safetly close this window.
-
----
-
-## Search the oioi
-![Storage information](tutorial_assets/5.png)  
-
-- Now launch it through LaunchPad
-
----
-
-## trust the oioi
-![Storage information](tutorial_assets/6.png)  
-- This pop will appear.
-- click open system settings
-- its basic acessiblity permission to listen yout macbook shortcut key.
-- (also eject the mount if you want)
----
-
-## trust the oioi 2
-![Storage information](tutorial_assets/7.png)  
-![Storage information](tutorial_assets/8.png)  
-
-
-- Tick the Acessiblity Permission.
-
----
-
-## use oioi
-![Storage information](tutorial_assets/56.png)  
-
-1. Runs automatically in background
-2. Default shortcuts (configurable):
-   - `⌥ + V`: Show clipboard history
-
----
-
-## ENHANCE PRODUCTIVITY USING oioi
-![Storage information](tutorial_assets/10.png)  
-
-Also form  above MenuBar you can time travel with your clipbaord. 
-
-
-## Uninstall oioi 🗑️
-1. Quit oioi from menu bar
-2. Drag to Trash from Applications
-3. Remove data folders:
-   ```bash
-   rm -rf ~/Library/Application\ Support/oioi
-   ```
-
----
-
-## Support ❓
-For help, please check:
-- Author : @vishesh9131 
-- [GitHub Issues](https://github.com/vishesh9131/oioi/issues)
-- Email: sciencely98@gmail.com
-
----
-
-📌 *Note: Requires macOS 10.14 or later*  
-⭐ *If you love oioi, please star our GitHub repo!*
+```
+electron/
+  scripts/build.mjs      # esbuild bundling + static copy
+  src/
+    shared/              # types + filter logic (used by main and renderer)
+    main/                # main process: window, tray, clipboard, IPC
+    renderer/            # the panel UI (HTML/CSS/TS)
+  assets/                # tray + app icons (reused from the Swift app)
+```
