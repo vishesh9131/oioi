@@ -42,9 +42,8 @@ function createPanel(): BrowserWindow {
     movable: true,
     transparent: true,
     hasShadow: true,
-    // Real macOS "glass": native vibrancy blurs whatever is behind the window.
-    // Vibrancy can't be clipped to a custom radius, so we let macOS round the
-    // window (roundedCorners) — on macOS 26 that radius is already generous.
+    // Real macOS liquid-glass: native vibrancy blurs what's behind. It can't be
+    // clipped to a custom radius, so macOS rounds the window (generous on Tahoe).
     vibrancy: "under-window",
     visualEffectState: "active",
     roundedCorners: true,
