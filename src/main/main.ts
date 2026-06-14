@@ -40,11 +40,10 @@ function createPanel(): BrowserWindow {
     movable: true,
     transparent: true,
     hasShadow: true,
-    // CSS controls the (much larger) corner radius; the OS mask would otherwise
-    // cap it at the small system radius.
+    // Native vibrancy can't be clipped to a large corner radius (it leaves square
+    // corners around the rounded card). So we keep the window fully transparent
+    // and paint the rounded, frosted panel surface entirely in CSS.
     roundedCorners: false,
-    vibrancy: "popover",
-    visualEffectState: "active",
     skipTaskbar: true,
     fullscreenable: false,
     backgroundColor: "#00000000",

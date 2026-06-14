@@ -10,7 +10,7 @@
   --logo-bg: rgba(0, 0, 0, 0.06);
   --blue: #0a84ff;
   --green: #28a745;
-  --app-overlay: rgba(255, 255, 255, 0.35);
+  --app-overlay: rgba(248, 248, 250, 0.92);
   --scroll-thumb: rgba(0, 0, 0, 0.18);
 }
 
@@ -26,7 +26,7 @@
     --chip-bg: rgba(255, 255, 255, 0.1);
     --logo-bg: rgba(255, 255, 255, 0.1);
     --green: #30d158;
-    --app-overlay: rgba(28, 28, 30, 0.2);
+    --app-overlay: rgba(26, 26, 28, 0.9);
     --scroll-thumb: rgba(255, 255, 255, 0.22);
   }
 }
@@ -52,10 +52,14 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
-  /* 2–3x rounder than before (was 18px). */
+  /* 2–3x rounder than before (was 18px). The window is transparent outside this
+     card, so these corners are clean (no square vibrancy bleed). */
   border-radius: 44px;
   overflow: hidden;
   background: var(--app-overlay);
+  /* Real desktop blur where supported; harmless translucent panel otherwise. */
+  backdrop-filter: blur(30px) saturate(160%);
+  -webkit-backdrop-filter: blur(30px) saturate(160%);
   border: 0.5px solid var(--border);
 }
 

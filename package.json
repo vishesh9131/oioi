@@ -1,6 +1,6 @@
 {
   "name": "oioi-electron",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "oioi — a macOS clipboard manager (Electron port of the native Swift app)",
   "main": "dist/main/main.js",
   "author": "Vishesh",
