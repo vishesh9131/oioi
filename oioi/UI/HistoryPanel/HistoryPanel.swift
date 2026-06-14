@@ -17,10 +17,17 @@ struct HistoryPanel: View {
     // State for entry animation
     @State private var showContent = false
     
+    // Search focus state
+    @State private var isSearchFocused = false
+    
     var body: some View {
         ZStack(alignment: .topLeading) {
         VStack(spacing: 0) {
-                // Search bar removed
+                // Search and Filter Bar
+                searchAndFilterBar
+                    .padding(.horizontal, 16)
+                    .padding(.top, 16)
+                    .padding(.bottom, 8)
                 
                 // Clipboard content area - apply animation modifiers
                 enhancedClipboardItems
@@ -36,26 +43,6 @@ struct HistoryPanel: View {
                 RoundedRectangle(cornerRadius: 30)
                     .stroke(Color.white.opacity(0.1), lineWidth: 0.5)
             )
-            
-            // Close button
-            Button(action: {
-                closePanel()
-            }) {
-                Circle()
-                    .fill(Color.red.opacity(0.9))
-                    .frame(width: 14, height: 14)
-                    // .overlay(
-                    //     Image(systemName: "xmark")
-                    //         .font(.system(size: 8, weight: .bold))
-                    //         .foregroundColor(.white)
-                    //         .opacity(0.85)
-                    // )
-                    // .shadow(color: Color.black.opacity(0.2), radius: 1, x: 0, y: 1)
-            }
-            .buttonStyle(BorderlessButtonStyle())
-            .padding(.top, 16)
-            .padding(.leading, 16)
-            .help("Close")
         }
         .onAppear {
             // Enable keyboard navigation by default
@@ -77,10 +64,10 @@ struct HistoryPanel: View {
     private var enhancedClipboardItems: some View {
         ScrollViewReader { proxy in
             LazyVStack(spacing: 0) {
-                if viewModel.items.isEmpty {
+                if viewModel.filteredItems.isEmpty {
                     enhancedEmptyState
                 } else {
-                    ForEach(Array(viewModel.items.enumerated()), id: \.element.id) { index, item in
+                    ForEach(Array(viewModel.filteredItems.enumerated()), id: \.element.id) { index, item in
                         VStack(spacing: 0) {
                             EnhancedClipboardItemView(
                                 item: item,
@@ -129,7 +116,7 @@ struct HistoryPanel: View {
                     .animation(.spring(response: 0.4, dampingFraction: 0.7), value: viewModel.items.count)
                 }
             }
-            .padding(.top, 12)
+            .padding(.top, 4)
             .customScrollBar()
             .onChange(of: selectedIndex) { index in
                 if let index = index, index < viewModel.items.count {
@@ -138,7 +125,109 @@ struct HistoryPanel: View {
                         proxy.scrollTo(id, anchor: .center)
                     }
                 }
+                }
             }
+        }
+    
+    // Search and Filter Interface
+    private var searchAndFilterBar: some View {
+        VStack(spacing: 8) {
+            // Header: Close Button + Search Field
+            HStack(spacing: 12) {
+                // Close button
+                Button(action: {
+                    closePanel()
+                }) {
+                    Circle()
+                        .fill(Color.red.opacity(0.9))
+                        .frame(width: 14, height: 14)
+                }
+                .buttonStyle(BorderlessButtonStyle())
+                .help("Close")
+                
+                // Search Field
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(.secondary)
+                    
+                    ImprovedTextField(
+                        text: $viewModel.searchText,
+                        isActive: $isSearchFocused,
+                        onCommit: {
+                            // Select first result on enter if needed
+                            selectFirstResult()
+                        },
+                        onKeyDown: { key in
+                            handleKeyDown(key)
+                        }
+                    )
+                    .frame(height: 20)
+                    
+                    if !viewModel.searchText.isEmpty {
+                        Button(action: { viewModel.searchText = "" }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(.secondary)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
+                }
+                .padding(8)
+                .background(Color(NSColor.controlBackgroundColor).opacity(0.5))
+                .cornerRadius(8)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.secondary.opacity(0.2), lineWidth: 0.5)
+                )
+            }
+            
+            // Filter Controls
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    // Type Filters
+                    ForEach(ContentFilterType.allCases) { type in
+                        FilterButton(title: type.rawValue, isSelected: viewModel.selectedFilter == type) {
+                            withAnimation {
+                                viewModel.selectedFilter = type
+                            }
+                        }
+                    }
+                    
+                    Divider()
+                        .frame(height: 20)
+                    
+                    // Date Filters
+                    ForEach(DateRangeFilter.allCases) { range in
+                        FilterButton(title: range.rawValue, isSelected: viewModel.selectedDateRange == range) {
+                            withAnimation {
+                                viewModel.selectedDateRange = range
+                            }
+                        }
+                    }
+                }
+                .padding(.horizontal, 2)
+            }
+        }
+    }
+    
+    // Helper View for Filter Buttons
+    struct FilterButton: View {
+        let title: String
+        let isSelected: Bool
+        let action: () -> Void
+        
+        var body: some View {
+            Button(action: action) {
+                Text(title)
+                    .font(.system(size: 11, weight: isSelected ? .semibold : .regular))
+                    .foregroundColor(isSelected ? .white : .primary)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+                    .background(
+                        Capsule()
+                            .fill(isSelected ? Color.blue : Color.secondary.opacity(0.1))
+                    )
+            }
+            .buttonStyle(PlainButtonStyle())
         }
     }
     
@@ -304,10 +393,7 @@ struct KeyHandlingView: NSViewRepresentable {
     func makeNSView(context: Context) -> NSView {
         let view = KeyHandlingNSView()
         view.onKeyDown = onKeyDown
-        // Delay making first responder slightly to ensure window is ready
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            view.window?.makeFirstResponder(view)
-        }
+        // Removed aggressive focus stealing
         return view
     }
     
@@ -330,8 +416,8 @@ struct KeyHandlingView: NSViewRepresentable {
             } else {
                  print("[KeyHandlingNSView] Could not create KeyEquivalent from characters.")
             }
-            // Don't call super, as it might trigger system beep for unhandled keys
-            // super.keyDown(with: event)
+            // Propagate unhandled events
+            super.keyDown(with: event)
         }
     }
 }

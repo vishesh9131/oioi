@@ -4,6 +4,13 @@ final class HistoryManager {
     static let shared = HistoryManager()
     
     private(set) var items: [ClipboardItem] = []
+    private let maxHistorySize = 50
+    
+    // Allow clearing history for testing or user action
+    func clearHistory() {
+        items.removeAll()
+        itemsDidChange()
+    }
     
     private init() {} // Make singleton initialization private
     
@@ -21,11 +28,10 @@ final class HistoryManager {
             print("Adding new unique item to history.")
             items.insert(newItem, at: 0)
             
-            // Optional: Limit history size
-            // let maxSize = 100 // Example limit
-            // if items.count > maxSize {
-            //     items.removeLast(items.count - maxSize)
-            // }
+            // Limit history size
+            if items.count > maxHistorySize {
+                items.removeLast(items.count - maxHistorySize)
+            }
         }
         itemsDidChange()
     }

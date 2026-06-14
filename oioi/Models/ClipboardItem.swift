@@ -22,11 +22,13 @@ struct ClipboardItem: Identifiable, Equatable {
     let id = UUID()
     let timestamp: Date
     let dataType: ClipboardDataType
+    let displayIcon: NSImage // Cache the icon
 
     // Explicit initializer accepting dataType
     init(dataType: ClipboardDataType, timestamp: Date = Date()) {
         self.dataType = dataType
         self.timestamp = timestamp
+        self.displayIcon = ClipboardItem.generateDisplayIcon(for: dataType)
     }
     
     // Helper for displaying a preview in the UI
@@ -45,8 +47,8 @@ struct ClipboardItem: Identifiable, Equatable {
         }
     }
 
-    // Helper to get a display icon
-    var displayIcon: NSImage {
+    // Helper to get a display icon (now static and used for initialization)
+    private static func generateDisplayIcon(for dataType: ClipboardDataType) -> NSImage {
         switch dataType {
         case .text:
             return NSImage(systemSymbolName: "doc.text", accessibilityDescription: "Text")!
@@ -77,10 +79,8 @@ struct ClipboardItem: Identifiable, Equatable {
 
     // Equatable conformance
     static func == (lhs: ClipboardItem, rhs: ClipboardItem) -> Bool {
-        // Compare based on dataType first for potential performance win
-        // Note: Comparing image Data might be slow for large images.
-        // Consider using a hash or checksum if performance becomes an issue.
-        lhs.dataType == rhs.dataType
+        // Compare based on id for performance
+        lhs.id == rhs.id
     }
 }
 

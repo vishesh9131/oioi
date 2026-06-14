@@ -4,6 +4,38 @@ import SwiftUI
 class HistoryViewModel: ObservableObject {
     @Published var items: [ClipboardItem] = []
     @Published var lastCopiedId: UUID? = nil // Track last copied item
+    
+    // Filter properties
+    @Published var searchText: String = ""
+    @Published var selectedFilter: ContentFilterType = .all
+    @Published var selectedDateRange: DateRangeFilter = .all
+    
+    // Computed property for filtered items
+    var filteredItems: [ClipboardItem] {
+        items.filter { item in
+            // 1. Date Filter
+            guard selectedDateRange.matches(item.timestamp) else { return false }
+            
+            // 2. Type Filter
+            switch selectedFilter {
+            case .all:
+                break // Pass
+            case .text:
+                guard case .text = item.dataType else { return false }
+            case .image:
+                guard case .image = item.dataType else { return false }
+            case .files:
+                guard case .fileURLs = item.dataType else { return false }
+            }
+            
+            // 3. Search Text
+            guard !searchText.isEmpty else { return true }
+            
+            // Simplified search: check preview string representation
+            // Improvements: Search inside text content fully, check filenames
+            return item.previewString.localizedCaseInsensitiveContains(searchText)
+        }
+    }
     private var cancellables = Set<AnyCancellable>()
     
     init() {
