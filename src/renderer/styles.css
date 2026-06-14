@@ -11,10 +11,7 @@
   --blue: #0a84ff;
   --green: #28a745;
   --glass-bg: rgba(255, 255, 255, 0.26);
-  --glass-sheen: rgba(255, 255, 255, 0.18);
-  --glass-edge: rgba(255, 255, 255, 0.7);
-  --glass-edge-soft: rgba(255, 255, 255, 0.28);
-  --glass-gloss: rgba(255, 255, 255, 0.28);
+  --glass-sheen: rgba(255, 255, 255, 0.12);
   --scroll-thumb: rgba(0, 0, 0, 0.18);
 }
 
@@ -31,10 +28,7 @@
     --logo-bg: rgba(255, 255, 255, 0.1);
     --green: #30d158;
     --glass-bg: rgba(34, 34, 40, 0.24);
-    --glass-sheen: rgba(255, 255, 255, 0.08);
-    --glass-edge: rgba(255, 255, 255, 0.32);
-    --glass-edge-soft: rgba(255, 255, 255, 0.1);
-    --glass-gloss: rgba(255, 255, 255, 0.14);
+    --glass-sheen: rgba(255, 255, 255, 0.06);
     --scroll-thumb: rgba(255, 255, 255, 0.22);
   }
 }
@@ -57,32 +51,15 @@ body {
 }
 
 #app {
-  position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow: hidden;
-  /* Real blur = native vibrancy. On top of it we paint Apple "Liquid Glass":
-     a tint + diagonal sheen, a bright specular top edge, soft side rims, and a
-     little bottom depth. No CSS radius — macOS rounds the window and clips
-     these edges along its corners. */
-  background: linear-gradient(135deg, var(--glass-sheen), transparent 55%),
+  /* Real blur comes from native vibrancy; this is a readability tint plus a
+     faint diagonal sheen for the "liquid glass" feel. No radius/border here —
+     macOS rounds the window and a CSS one would show square corners. */
+  background: linear-gradient(135deg, var(--glass-sheen), transparent 60%),
     var(--glass-bg);
-  box-shadow: inset 0 1.5px 0 var(--glass-edge),
-    inset 2px 2px 0 rgba(120, 200, 255, 0.35), /* cool chromatic edge */
-    inset -2px -2px 0 rgba(255, 140, 190, 0.3), /* warm chromatic edge */
-    inset 0 0 16px rgba(255, 255, 255, 0.18), /* inner lens ring */
-    inset 0 -36px 50px -28px rgba(0, 0, 0, 0.22);
-}
-
-/* Top-left specular gloss highlight — the "liquid" sheen of glass. */
-#app::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background: radial-gradient(135% 75% at 12% -20%, var(--glass-gloss), transparent 46%);
 }
 
 /* ---- header ---- */
