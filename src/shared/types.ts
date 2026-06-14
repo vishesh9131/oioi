@@ -48,6 +48,8 @@ export const IPC = {
   getSettings: "settings:get",
   saveSettings: "settings:save",
   settingsDone: "settings:done",
+  getAccessibility: "perm:accessibility:get",
+  openAccessibility: "perm:accessibility:open",
 } as const;
 
 /** Result of a save that may have failed to register the global shortcut. */
@@ -65,6 +67,8 @@ export interface OioiApi {
   getSettings(): Promise<Settings>;
   saveSettings(patch: Partial<Settings>): Promise<SaveSettingsResult>;
   settingsDone(): Promise<void>;
+  getAccessibility(): Promise<boolean>;
+  openAccessibility(): Promise<void>;
   onHistoryUpdated(cb: (items: ClipboardItem[]) => void): () => void;
   onPanelShown(cb: () => void): () => void;
 }

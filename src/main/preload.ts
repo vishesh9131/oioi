@@ -17,6 +17,8 @@ const api = {
   saveSettings: (patch: Partial<Settings>): Promise<SaveSettingsResult> =>
     ipcRenderer.invoke(IPC.saveSettings, patch),
   settingsDone: (): Promise<void> => ipcRenderer.invoke(IPC.settingsDone),
+  getAccessibility: (): Promise<boolean> => ipcRenderer.invoke(IPC.getAccessibility),
+  openAccessibility: (): Promise<void> => ipcRenderer.invoke(IPC.openAccessibility),
 
   onHistoryUpdated: (cb: (items: ClipboardItem[]) => void): (() => void) => {
     const listener = (_e: unknown, items: ClipboardItem[]) => cb(items);

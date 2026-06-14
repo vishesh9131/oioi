@@ -9,6 +9,8 @@ import {
   Menu,
   nativeImage,
   screen,
+  shell,
+  systemPreferences,
   Tray,
 } from "electron";
 import { join } from "node:path";
@@ -40,10 +42,12 @@ function createPanel(): BrowserWindow {
     movable: true,
     transparent: true,
     hasShadow: true,
-    // Native vibrancy can't be clipped to a large corner radius (it leaves square
-    // corners around the rounded card). So we keep the window fully transparent
-    // and paint the rounded, frosted panel surface entirely in CSS.
-    roundedCorners: false,
+    // Real macOS "glass": native vibrancy blurs whatever is behind the window.
+    // Vibrancy can't be clipped to a custom radius, so we let macOS round the
+    // window (roundedCorners) — on macOS 26 that radius is already generous.
+    vibrancy: "under-window",
+    visualEffectState: "active",
+    roundedCorners: true,
     skipTaskbar: true,
     fullscreenable: false,
     backgroundColor: "#00000000",
@@ -141,6 +145,29 @@ function buildTrayMenu(): Menu {
   ]);
 }
 
+// --- splash -----------------------------------------------------------------
+
+function createSplash(): BrowserWindow {
+  const splash = new BrowserWindow({
+    width: 340,
+    height: 360,
+    frame: false,
+    transparent: true,
+    resizable: false,
+    movable: false,
+    alwaysOnTop: true,
+    center: true,
+    skipTaskbar: true,
+    fullscreenable: false,
+    hasShadow: true,
+    vibrancy: "under-window",
+    visualEffectState: "active",
+    roundedCorners: true,
+  });
+  splash.loadFile(join(__dirname, "../renderer/splash.html"));
+  return splash;
+}
+
 // --- settings window --------------------------------------------------------
 
 function showSettings(): void {
@@ -229,6 +256,16 @@ function registerIpc(): void {
     settingsWin?.close();
   });
 
+  ipcMain.handle(IPC.getAccessibility, () =>
+    process.platform === "darwin" ? systemPreferences.isTrustedAccessibilityClient(false) : true
+  );
+  ipcMain.handle(IPC.openAccessibility, () => {
+    if (process.platform === "darwin") systemPreferences.isTrustedAccessibilityClient(true);
+    void shell.openExternal(
+      "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"
+    );
+  });
+
   historyManager.on("changed", (items) => {
     panel?.webContents.send(IPC.historyUpdated, items);
   });
@@ -245,8 +282,12 @@ app.whenReady().then(() => {
   const settings = getSettings();
   applySettings(settings);
 
-  // First run after install: walk the user through setup.
-  if (!settings.configured) showSettings();
+  // Adobe-style: show the splash, then hand off to first-run onboarding.
+  const splash = createSplash();
+  setTimeout(() => {
+    if (!splash.isDestroyed()) splash.destroy();
+    if (!settings.configured) showSettings();
+  }, 2200);
 });
 
 app.on("second-instance", () => showPanel(positionAtTray));

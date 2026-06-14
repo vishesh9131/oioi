@@ -41,7 +41,7 @@ const rendererCtx = await esbuild.context({
 
 function copyStatic() {
   mkdirSync(resolve(root, "dist/renderer"), { recursive: true });
-  for (const f of ["index.html", "styles.css", "settings.html", "settings.css"]) {
+  for (const f of ["index.html", "styles.css", "settings.html", "settings.css", "splash.html", "splash.css"]) {
     cpSync(resolve(root, "src/renderer", f), resolve(root, "dist/renderer", f));
   }
   cpSync(resolve(root, "assets"), resolve(root, "dist/assets"), { recursive: true });

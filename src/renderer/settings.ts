@@ -125,8 +125,26 @@ clearBtn.addEventListener("click", () => void window.oioi.clearHistory());
 shortcutBtn.addEventListener("click", startRecording);
 doneBtn.addEventListener("click", () => void window.oioi.settingsDone());
 
+// --- accessibility (optional) ----------------------------------------------
+const accBtn = $<HTMLButtonElement>("#acc-btn");
+const accHint = $("#acc-hint");
+
+async function refreshAccessibility(): Promise<void> {
+  const granted = await window.oioi.getAccessibility();
+  accBtn.textContent = granted ? "Granted ✓" : "Open Settings";
+  accBtn.disabled = granted;
+  accHint.textContent = granted
+    ? "oioi can use the shortcut everywhere"
+    : "Recommended so the shortcut works in every app";
+}
+accBtn.addEventListener("click", async () => {
+  await window.oioi.openAccessibility();
+  setTimeout(() => void refreshAccessibility(), 1500);
+});
+
 async function init(): Promise<void> {
   current = await window.oioi.getSettings();
   refresh();
+  void refreshAccessibility();
 }
 void init();

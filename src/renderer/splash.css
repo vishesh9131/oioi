@@ -1,0 +1,71 @@
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+:root {
+  --text: #1d1d1f;
+  --secondary: rgba(0, 0, 0, 0.5);
+  --tint: rgba(255, 255, 255, 0.25);
+  --ring: rgba(0, 0, 0, 0.15);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: rgba(255, 255, 255, 0.92);
+    --secondary: rgba(255, 255, 255, 0.5);
+    --tint: rgba(22, 22, 24, 0.25);
+    --ring: rgba(255, 255, 255, 0.18);
+  }
+}
+
+.splash {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  height: 100%;
+  background: var(--tint);
+  color: var(--text);
+}
+
+.logo {
+  width: 96px;
+  height: 96px;
+  border-radius: 22px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+.name {
+  font-size: 26px;
+  font-weight: 700;
+}
+.tagline {
+  font-size: 13px;
+  color: var(--secondary);
+  margin-top: -10px;
+}
+.spinner {
+  width: 26px;
+  height: 26px;
+  margin-top: 6px;
+  border: 3px solid var(--ring);
+  border-top-color: var(--text);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+.status {
+  font-size: 12px;
+  color: var(--secondary);
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
