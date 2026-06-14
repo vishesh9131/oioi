@@ -69,7 +69,9 @@ body {
   background: linear-gradient(135deg, var(--glass-sheen), transparent 55%),
     var(--glass-bg);
   box-shadow: inset 0 1.5px 0 var(--glass-edge),
-    inset 1px 0 0 var(--glass-edge-soft), inset -1px 0 0 var(--glass-edge-soft),
+    inset 2px 2px 0 rgba(120, 200, 255, 0.35), /* cool chromatic edge */
+    inset -2px -2px 0 rgba(255, 140, 190, 0.3), /* warm chromatic edge */
+    inset 0 0 16px rgba(255, 255, 255, 0.18), /* inner lens ring */
     inset 0 -36px 50px -28px rgba(0, 0, 0, 0.22);
 }
 
