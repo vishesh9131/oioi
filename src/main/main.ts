@@ -68,7 +68,7 @@ function createPanel(): BrowserWindow {
 async function showPanel(position: (win: BrowserWindow) => void): Promise<void> {
   if (!panel) panel = createPanel();
   position(panel); // set bounds while still hidden so the capture excludes us
-  await setBackdrop(panel);
+  if (getSettings().panelStyle === "glass") await setBackdrop(panel);
   panel.show();
   panel.focus();
   panel.webContents.send(IPC.panelShown);

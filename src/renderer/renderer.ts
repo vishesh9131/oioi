@@ -298,11 +298,12 @@ function init(): void {
 }
 
 async function applyGlass(): Promise<void> {
-  const { glassTint, glassBlur, glassRadius } = await window.oioi.getSettings();
+  const { glassTint, glassBlur, glassRadius, panelStyle } = await window.oioi.getSettings();
   const s = document.documentElement.style;
   s.setProperty("--glass-a", String(glassTint));
   s.setProperty("--glass-blur", `${glassBlur}px`);
   s.setProperty("--glass-radius", `${glassRadius}px`);
+  document.getElementById("app")?.classList.toggle("soft", panelStyle === "soft");
 }
 
 async function refresh(): Promise<void> {

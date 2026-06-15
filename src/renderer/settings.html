@@ -71,8 +71,19 @@
 
         <div class="row">
           <div class="row-text">
+            <div class="row-label">Panel style</div>
+            <div class="row-hint">Soft = lightest · Glass = blurs the desktop (needs Screen Recording)</div>
+          </div>
+          <select id="panelStyle">
+            <option value="soft">Soft white</option>
+            <option value="glass">Liquid glass</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <div class="row-text">
             <div class="row-label">Blur</div>
-            <div class="row-hint">Background blur strength</div>
+            <div class="row-hint">Background blur strength (Glass only)</div>
           </div>
           <input type="range" id="glassBlur" min="0" max="100" step="1" value="40" />
         </div>

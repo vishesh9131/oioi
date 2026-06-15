@@ -14,6 +14,7 @@
   --glass-a: 0.12; /* tint, from Glass frost */
   --glass-blur: 40px; /* from Blur */
   --glass-radius: 28px; /* from Corners */
+  --soft-bg: #f5f5f7; /* flat soft Apple white */
   --scroll-thumb: rgba(0, 0, 0, 0.18);
 }
 
@@ -30,6 +31,7 @@
     --logo-bg: rgba(255, 255, 255, 0.1);
     --green: #30d158;
     --glass-rgb: 34 34 40;
+    --soft-bg: #1d1d1f;
     --glass-sheen: rgba(255, 255, 255, 0.06);
     --scroll-thumb: rgba(255, 255, 255, 0.22);
   }
@@ -84,6 +86,14 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+/* Soft white style: no desktop capture, just a clean opaque panel. */
+#app.soft #backdrop {
+  display: none;
+}
+#app.soft #glass-tint {
+  background: var(--soft-bg);
 }
 
 /* ---- header ---- */

@@ -33,6 +33,8 @@ export interface Settings {
   startAtLogin: boolean;
   /** Maximum number of items kept in history. */
   maxHistory: number;
+  /** Panel background: lightweight soft white, or desktop-blur liquid glass. */
+  panelStyle: "soft" | "glass";
   /** Tint opacity over the blurred backdrop (0–0.7); higher = milkier/less transparent. */
   glassTint: number;
   /** Backdrop blur radius in px (0–100). */

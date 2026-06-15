@@ -11,6 +11,7 @@ const maxHistoryVal = $("#maxHistoryVal");
 const glassEl = $<HTMLInputElement>("#glassTint");
 const blurEl = $<HTMLInputElement>("#glassBlur");
 const radiusEl = $<HTMLInputElement>("#glassRadius");
+const styleEl = $<HTMLSelectElement>("#panelStyle");
 const shortcutBtn = $<HTMLButtonElement>("#shortcut");
 const shortcutHint = $("#shortcut-hint");
 const clearBtn = $<HTMLButtonElement>("#clear");
@@ -38,6 +39,7 @@ function refresh(): void {
   startAtLoginEl.checked = current.startAtLogin;
   maxHistoryEl.value = String(current.maxHistory);
   maxHistoryVal.textContent = String(current.maxHistory);
+  styleEl.value = current.panelStyle;
   glassEl.value = String(Math.round(current.glassTint * 100));
   blurEl.value = String(current.glassBlur);
   radiusEl.value = String(current.glassRadius);
@@ -130,6 +132,9 @@ maxHistoryEl.addEventListener("change", () => save({ maxHistory: Number(maxHisto
 glassEl.addEventListener("change", () => save({ glassTint: Number(glassEl.value) / 100 }));
 blurEl.addEventListener("change", () => save({ glassBlur: Number(blurEl.value) }));
 radiusEl.addEventListener("change", () => save({ glassRadius: Number(radiusEl.value) }));
+styleEl.addEventListener("change", () =>
+  save({ panelStyle: styleEl.value === "glass" ? "glass" : "soft" })
+);
 clearBtn.addEventListener("click", () => void window.oioi.clearHistory());
 shortcutBtn.addEventListener("click", startRecording);
 doneBtn.addEventListener("click", () => void window.oioi.settingsDone());
