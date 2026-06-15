@@ -293,10 +293,8 @@ function init(): void {
 }
 
 async function applyGlass(): Promise<void> {
-  const { glassTint, glassBlur } = await window.oioi.getSettings();
-  const root = document.documentElement.style;
-  root.setProperty("--glass-a", String(glassTint));
-  root.setProperty("--glass-blur", `${glassBlur}px`);
+  const { glassTint } = await window.oioi.getSettings();
+  document.documentElement.style.setProperty("--glass-a", String(glassTint));
 }
 
 async function refresh(): Promise<void> {
