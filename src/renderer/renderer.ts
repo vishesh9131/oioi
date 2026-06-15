@@ -273,6 +273,11 @@ function init(): void {
 
   document.addEventListener("keydown", onKeyDown);
 
+  const backdrop = $<HTMLImageElement>("#backdrop");
+  window.oioi.onBackdrop((url) => {
+    backdrop.src = url;
+  });
+
   window.oioi.onHistoryUpdated((next) => {
     items = next;
     renderList();
@@ -293,8 +298,11 @@ function init(): void {
 }
 
 async function applyGlass(): Promise<void> {
-  const { glassTint } = await window.oioi.getSettings();
-  document.documentElement.style.setProperty("--glass-a", String(glassTint));
+  const { glassTint, glassBlur, glassRadius } = await window.oioi.getSettings();
+  const s = document.documentElement.style;
+  s.setProperty("--glass-a", String(glassTint));
+  s.setProperty("--glass-blur", `${glassBlur}px`);
+  s.setProperty("--glass-radius", `${glassRadius}px`);
 }
 
 async function refresh(): Promise<void> {

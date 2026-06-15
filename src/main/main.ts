@@ -4,6 +4,7 @@
 import {
   app,
   BrowserWindow,
+  desktopCapturer,
   globalShortcut,
   ipcMain,
   Menu,
@@ -42,11 +43,9 @@ function createPanel(): BrowserWindow {
     movable: true,
     transparent: true,
     hasShadow: true,
-    // Real macOS liquid-glass: native vibrancy blurs what's behind. It can't be
-    // clipped to a custom radius, so macOS rounds the window (generous on Tahoe).
-    vibrancy: "under-window",
-    visualEffectState: "active",
-    roundedCorners: true,
+    // No native vibrancy: we capture the desktop behind the panel and blur that
+    // image ourselves (see setBackdrop). That frees the corner radius for CSS.
+    roundedCorners: false,
     skipTaskbar: true,
     fullscreenable: false,
     backgroundColor: "#00000000",
@@ -66,19 +65,46 @@ function createPanel(): BrowserWindow {
   return win;
 }
 
-function showPanel(position: (win: BrowserWindow) => void): void {
+async function showPanel(position: (win: BrowserWindow) => void): Promise<void> {
   if (!panel) panel = createPanel();
-  position(panel);
+  position(panel); // set bounds while still hidden so the capture excludes us
+  await setBackdrop(panel);
   panel.show();
   panel.focus();
   panel.webContents.send(IPC.panelShown);
+}
+
+/** Grab the desktop region behind the (still hidden) panel for the glass blur. */
+async function setBackdrop(win: BrowserWindow): Promise<void> {
+  try {
+    const b = win.getBounds();
+    const disp = screen.getDisplayMatching(b);
+    const sources = await desktopCapturer.getSources({
+      types: ["screen"],
+      thumbnailSize: { width: disp.size.width, height: disp.size.height },
+    });
+    const src =
+      sources.find((s) => String(s.display_id) === String(disp.id)) ?? sources[0];
+    if (!src || src.thumbnail.isEmpty()) return; // no screen-recording permission yet
+    const ts = src.thumbnail.getSize();
+    const scale = ts.width / disp.bounds.width;
+    const shot = src.thumbnail.crop({
+      x: Math.round((b.x - disp.bounds.x) * scale),
+      y: Math.round((b.y - disp.bounds.y) * scale),
+      width: Math.round(b.width * scale),
+      height: Math.round(b.height * scale),
+    });
+    win.webContents.send(IPC.backdrop, shot.toDataURL());
+  } catch {
+    /* capture failed — panel just shows its tint */
+  }
 }
 
 function togglePanel(position: (win: BrowserWindow) => void): void {
   if (panel && panel.isVisible()) {
     panel.hide();
   } else {
-    showPanel(position);
+    void showPanel(position);
   }
 }
 

@@ -33,8 +33,12 @@ export interface Settings {
   startAtLogin: boolean;
   /** Maximum number of items kept in history. */
   maxHistory: number;
-  /** Glass tint opacity over the vibrancy (0–0.7); higher = milkier/less transparent. */
+  /** Tint opacity over the blurred backdrop (0–0.7); higher = milkier/less transparent. */
   glassTint: number;
+  /** Backdrop blur radius in px (0–100). */
+  glassBlur: number;
+  /** Panel corner radius in px (0–60). */
+  glassRadius: number;
   /** Set true once the user has completed first-run setup. */
   configured: boolean;
 }
@@ -47,6 +51,7 @@ export const IPC = {
   clearHistory: "history:clear",
   closePanel: "panel:close",
   panelShown: "panel:shown",
+  backdrop: "panel:backdrop",
   getSettings: "settings:get",
   saveSettings: "settings:save",
   settingsDone: "settings:done",
@@ -69,6 +74,7 @@ export interface OioiApi {
   getSettings(): Promise<Settings>;
   saveSettings(patch: Partial<Settings>): Promise<SaveSettingsResult>;
   settingsDone(): Promise<void>;
+  onBackdrop(cb: (dataUrl: string) => void): () => void;
   getAccessibility(): Promise<boolean>;
   openAccessibility(): Promise<void>;
   onHistoryUpdated(cb: (items: ClipboardItem[]) => void): () => void;

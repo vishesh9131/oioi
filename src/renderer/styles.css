@@ -11,8 +11,9 @@
   --blue: #0a84ff;
   --green: #28a745;
   --glass-rgb: 255 255 255;
-  --glass-a: 0.18; /* overridden live from Glass frost */
-  --glass-sheen: rgba(255, 255, 255, 0.12);
+  --glass-a: 0.12; /* tint, from Glass frost */
+  --glass-blur: 40px; /* from Blur */
+  --glass-radius: 28px; /* from Corners */
   --scroll-thumb: rgba(0, 0, 0, 0.18);
 }
 
@@ -52,16 +53,37 @@ body {
 }
 
 #app {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--glass-radius);
+  background: transparent;
+}
+
+/* Snapshot of the desktop behind the panel, blurred = the glass. */
+#backdrop {
+  position: absolute;
+  inset: -12%;
+  width: 124%;
+  height: 124%;
+  object-fit: cover;
+  filter: blur(var(--glass-blur)) saturate(135%);
+  z-index: 0;
+}
+/* Tint over the blur — the transparency control. */
+#glass-tint {
+  position: absolute;
+  inset: 0;
+  background: rgb(var(--glass-rgb) / var(--glass-a));
+  z-index: 1;
+}
+/* The actual UI sits above the glass layers. */
+#content {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow: hidden;
-  /* Real blur comes from native vibrancy; this is a readability tint plus a
-     faint diagonal sheen for the "liquid glass" feel. No radius/border here —
-     macOS rounds the window and a CSS one would show square corners. */
-  /* Just the tint over the native vibrancy — no white sheen, so the panel stays
-     as see-through as the vibrancy material allows. */
-  background: rgb(var(--glass-rgb) / var(--glass-a));
 }
 
 /* ---- header ---- */

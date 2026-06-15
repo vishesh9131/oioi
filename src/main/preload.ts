@@ -31,6 +31,12 @@ const api = {
     ipcRenderer.on(IPC.panelShown, listener);
     return () => ipcRenderer.off(IPC.panelShown, listener);
   },
+
+  onBackdrop: (cb: (dataUrl: string) => void): (() => void) => {
+    const listener = (_e: unknown, dataUrl: string) => cb(dataUrl);
+    ipcRenderer.on(IPC.backdrop, listener);
+    return () => ipcRenderer.off(IPC.backdrop, listener);
+  },
 };
 
 export type OioiApi = typeof api;

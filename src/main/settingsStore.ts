@@ -9,7 +9,9 @@ export const DEFAULT_SETTINGS: Settings = {
   shortcut: "Alt+V",
   startAtLogin: false,
   maxHistory: 50,
-  glassTint: 0.05,
+  glassTint: 0.12,
+  glassBlur: 40,
+  glassRadius: 28,
   configured: false,
 };
 
@@ -37,6 +39,8 @@ export function saveSettings(patch: Partial<Settings>): Settings {
   // Clamp to sane bounds.
   next.maxHistory = Math.max(1, Math.min(500, Math.round(next.maxHistory)));
   next.glassTint = Math.max(0, Math.min(0.7, next.glassTint));
+  next.glassBlur = Math.max(0, Math.min(100, Math.round(next.glassBlur)));
+  next.glassRadius = Math.max(0, Math.min(60, Math.round(next.glassRadius)));
   cache = next;
   try {
     mkdirSync(app.getPath("userData"), { recursive: true });
