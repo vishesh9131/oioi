@@ -59,10 +59,9 @@ function createPanel(): BrowserWindow {
 
   win.loadFile(join(__dirname, "../renderer/index.html"));
 
-  // Transient behaviour: dismiss when focus leaves (parent of NSPopover.transient).
-  win.on("blur", () => {
-    if (!win.webContents.isDevToolsOpened()) win.hide();
-  });
+  // Show on whichever Space is active, and stay put until the user toggles the
+  // shortcut or hits the close button — no auto-hide on blur.
+  win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
 
   return win;
 }

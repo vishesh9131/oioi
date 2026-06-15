@@ -9,7 +9,7 @@ export const DEFAULT_SETTINGS: Settings = {
   shortcut: "Alt+V",
   startAtLogin: false,
   maxHistory: 50,
-  glassTint: 0.38,
+  glassTint: 0.18,
   configured: false,
 };
 
