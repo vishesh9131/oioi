@@ -33,8 +33,10 @@ export interface Settings {
   startAtLogin: boolean;
   /** Maximum number of items kept in history. */
   maxHistory: number;
-  /** Glass tint opacity over the vibrancy (0.05–0.7); higher = frostier/blurrier. */
+  /** Glass tint opacity over the vibrancy (0.05–0.7); higher = milkier. */
   glassTint: number;
+  /** Extra blur in px stacked on the vibrancy (0–100); higher = blurrier. */
+  glassBlur: number;
   /** Set true once the user has completed first-run setup. */
   configured: boolean;
 }

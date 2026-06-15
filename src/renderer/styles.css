@@ -11,7 +11,8 @@
   --blue: #0a84ff;
   --green: #28a745;
   --glass-rgb: 255 255 255;
-  --glass-a: 0.38; /* overridden live from the Glass frost setting */
+  --glass-a: 0.18; /* overridden live from Glass frost */
+  --glass-blur: 40px; /* overridden live from Blur */
   --glass-sheen: rgba(255, 255, 255, 0.12);
   --scroll-thumb: rgba(0, 0, 0, 0.18);
 }
@@ -61,6 +62,9 @@ body {
      macOS rounds the window and a CSS one would show square corners. */
   background: linear-gradient(135deg, var(--glass-sheen), transparent 60%),
     rgb(var(--glass-rgb) / var(--glass-a));
+  /* Extra blur stacked on the native vibrancy — strength tunable via settings. */
+  backdrop-filter: blur(var(--glass-blur, 40px)) saturate(150%);
+  -webkit-backdrop-filter: blur(var(--glass-blur, 40px)) saturate(150%);
 }
 
 /* ---- header ---- */

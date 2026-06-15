@@ -9,6 +9,7 @@ const startAtLoginEl = $<HTMLInputElement>("#startAtLogin");
 const maxHistoryEl = $<HTMLInputElement>("#maxHistory");
 const maxHistoryVal = $("#maxHistoryVal");
 const glassEl = $<HTMLInputElement>("#glassTint");
+const blurEl = $<HTMLInputElement>("#glassBlur");
 const shortcutBtn = $<HTMLButtonElement>("#shortcut");
 const shortcutHint = $("#shortcut-hint");
 const clearBtn = $<HTMLButtonElement>("#clear");
@@ -37,6 +38,7 @@ function refresh(): void {
   maxHistoryEl.value = String(current.maxHistory);
   maxHistoryVal.textContent = String(current.maxHistory);
   glassEl.value = String(Math.round(current.glassTint * 100));
+  blurEl.value = String(current.glassBlur);
   if (!recording) shortcutBtn.textContent = prettyShortcut(current.shortcut);
 
   const ready = current.monitoring && Boolean(current.shortcut);
@@ -124,6 +126,7 @@ maxHistoryEl.addEventListener("input", () => {
 });
 maxHistoryEl.addEventListener("change", () => save({ maxHistory: Number(maxHistoryEl.value) }));
 glassEl.addEventListener("change", () => save({ glassTint: Number(glassEl.value) / 100 }));
+blurEl.addEventListener("change", () => save({ glassBlur: Number(blurEl.value) }));
 clearBtn.addEventListener("click", () => void window.oioi.clearHistory());
 shortcutBtn.addEventListener("click", startRecording);
 doneBtn.addEventListener("click", () => void window.oioi.settingsDone());
