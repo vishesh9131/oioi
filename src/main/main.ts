@@ -43,6 +43,7 @@ function createPanel(): BrowserWindow {
     movable: true,
     transparent: true,
     hasShadow: true,
+    alwaysOnTop: true, // stay above other windows when they're clicked
     // No native vibrancy: we capture the desktop behind the panel and blur that
     // image ourselves (see setBackdrop). That frees the corner radius for CSS.
     roundedCorners: false,

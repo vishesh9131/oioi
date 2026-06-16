@@ -72,7 +72,12 @@ class ClipboardWatcher {
       const png = img.toPNG();
       const signature = `i:${createHash("md5").update(png).digest("hex")}`;
       const imageDataUrl = `data:image/png;base64,${png.toString("base64")}`;
-      return this.base("image", signature, { imageDataUrl, previewString: "Image" });
+      // Icon-only file copies often still carry the name as text — use it.
+      const label = clipboard.readText().trim();
+      return this.base("image", signature, {
+        imageDataUrl,
+        previewString: label || "Image",
+      });
     }
 
     const text = clipboard.readText();

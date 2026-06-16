@@ -82,9 +82,6 @@ function syncChips(): void {
 }
 
 function leadingIcon(item: ClipboardItem): string {
-  if (item.kind === "image" && item.imageDataUrl) {
-    return `<img class="thumb-icon" src="${item.imageDataUrl}" alt="" />`;
-  }
   if (item.kind === "files" && item.iconDataUrl) {
     return `<img class="thumb-icon" src="${item.iconDataUrl}" alt="" />`;
   }
@@ -93,7 +90,11 @@ function leadingIcon(item: ClipboardItem): string {
 
 function contentMarkup(item: ClipboardItem): string {
   if (item.kind === "image" && item.imageDataUrl) {
-    return `<img class="thumb" src="${item.imageDataUrl}" alt="Image" />`;
+    const name =
+      item.previewString && item.previewString !== "Image"
+        ? `<div class="content-text files">${escapeHtml(item.previewString)}</div>`
+        : "";
+    return `${name}<img class="thumb" src="${item.imageDataUrl}" alt="Image" />`;
   }
   const label =
     item.kind === "files"
