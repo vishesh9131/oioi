@@ -62,6 +62,13 @@ function createPanel(): BrowserWindow {
   // shortcut or hits the close button — no auto-hide on blur.
   win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
 
+  // Pre-warm the GPU surface offscreen so the first real show isn't laggy.
+  win.webContents.once("did-finish-load", () => {
+    win.setPosition(-10000, -10000);
+    win.showInactive();
+    win.hide();
+  });
+
   return win;
 }
 
@@ -79,9 +86,13 @@ async function setBackdrop(win: BrowserWindow): Promise<void> {
   try {
     const b = win.getBounds();
     const disp = screen.getDisplayMatching(b);
+    // Low-res capture: we blur it heavily anyway, so /3 is plenty and ~3x faster.
     const sources = await desktopCapturer.getSources({
       types: ["screen"],
-      thumbnailSize: { width: disp.size.width, height: disp.size.height },
+      thumbnailSize: {
+        width: Math.round(disp.size.width / 3),
+        height: Math.round(disp.size.height / 3),
+      },
     });
     const src =
       sources.find((s) => String(s.display_id) === String(disp.id)) ?? sources[0];
