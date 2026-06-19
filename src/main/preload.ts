@@ -17,8 +17,17 @@ const api = {
   saveSettings: (patch: Partial<Settings>): Promise<SaveSettingsResult> =>
     ipcRenderer.invoke(IPC.saveSettings, patch),
   settingsDone: (): Promise<void> => ipcRenderer.invoke(IPC.settingsDone),
+  onboardingDone: (): Promise<void> => ipcRenderer.invoke(IPC.onboardingDone),
   getAccessibility: (): Promise<boolean> => ipcRenderer.invoke(IPC.getAccessibility),
   openAccessibility: (): Promise<void> => ipcRenderer.invoke(IPC.openAccessibility),
+  getScreenPermission: (): Promise<boolean> => ipcRenderer.invoke(IPC.getScreenPermission),
+  openScreenSettings: (): Promise<void> => ipcRenderer.invoke(IPC.openScreenSettings),
+
+  onPanelOpened: (cb: () => void): (() => void) => {
+    const listener = () => cb();
+    ipcRenderer.on(IPC.panelOpened, listener);
+    return () => ipcRenderer.off(IPC.panelOpened, listener);
+  },
 
   onHistoryUpdated: (cb: (items: ClipboardItem[]) => void): (() => void) => {
     const listener = (_e: unknown, items: ClipboardItem[]) => cb(items);

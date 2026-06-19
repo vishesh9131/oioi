@@ -26,6 +26,7 @@ const WINDOW_HEIGHT = 500;
 let tray: Tray | null = null;
 let panel: BrowserWindow | null = null;
 let settingsWin: BrowserWindow | null = null;
+let onboardingWin: BrowserWindow | null = null;
 
 app.setName("oioi");
 // Single-instance: a second launch just focuses the existing one.
@@ -62,6 +63,9 @@ function createPanel(): BrowserWindow {
   // Show on whichever Space is active, and stay put until the user toggles the
   // shortcut or hits the close button — no auto-hide on blur.
   win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+  // setVisibleOnAllWorkspaces resets the window level, so assert always-on-top
+  // AFTER it (otherwise clicking another app drops the panel behind).
+  win.setAlwaysOnTop(true, "floating");
 
   // Pre-warm the GPU surface offscreen so the first real show isn't laggy.
   win.webContents.once("did-finish-load", () => {
@@ -77,9 +81,11 @@ async function showPanel(position: (win: BrowserWindow) => void): Promise<void> 
   if (!panel) panel = createPanel();
   position(panel); // set bounds while still hidden so the capture excludes us
   if (getSettings().panelStyle === "glass") await setBackdrop(panel);
+  panel.setAlwaysOnTop(true, "floating"); // re-assert; macOS can drop it otherwise
   panel.show();
   panel.focus();
   panel.webContents.send(IPC.panelShown);
+  onboardingWin?.webContents.send(IPC.panelOpened); // drives the onboarding "try ⌥V" step
 }
 
 /** Grab the desktop region behind the (still hidden) panel for the glass blur. */
@@ -175,10 +181,48 @@ function buildTrayMenu(): Menu {
     },
     { type: "separator" },
     { label: "Settings…", click: showSettings },
+    { label: "Setup Guide…", click: showOnboarding },
     { label: "Clear History", click: () => historyManager.clear() },
     { type: "separator" },
     { label: "Quit oioi", role: "quit" },
   ]);
+}
+
+// --- onboarding -------------------------------------------------------------
+
+function showOnboarding(): void {
+  if (onboardingWin && !onboardingWin.isDestroyed()) {
+    onboardingWin.show();
+    onboardingWin.focus();
+    return;
+  }
+  app.dock?.show();
+  onboardingWin = new BrowserWindow({
+    width: 560,
+    height: 640,
+    resizable: false,
+    fullscreenable: false,
+    minimizable: false,
+    alwaysOnTop: true, // setup window must stay visible
+    title: "Welcome to oioi",
+    titleBarStyle: "hiddenInset",
+    webPreferences: {
+      preload: join(__dirname, "preload.js"),
+      contextIsolation: true,
+      nodeIntegration: false,
+    },
+  });
+  onboardingWin.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+  onboardingWin.loadFile(join(__dirname, "../renderer/onboarding.html"));
+  onboardingWin.webContents.once("did-finish-load", () => {
+    onboardingWin?.show();
+    onboardingWin?.focus();
+    app.focus({ steal: true }); // accessory app: pull it to the front
+  });
+  onboardingWin.on("closed", () => {
+    onboardingWin = null;
+    if (!settingsWin) app.dock?.hide();
+  });
 }
 
 // --- splash -----------------------------------------------------------------
@@ -292,6 +336,11 @@ function registerIpc(): void {
     settingsWin?.close();
   });
 
+  ipcMain.handle(IPC.onboardingDone, () => {
+    saveSettings({ configured: true });
+    onboardingWin?.close();
+  });
+
   ipcMain.handle(IPC.getAccessibility, () =>
     process.platform === "darwin" ? systemPreferences.isTrustedAccessibilityClient(false) : true
   );
@@ -299,6 +348,20 @@ function registerIpc(): void {
     if (process.platform === "darwin") systemPreferences.isTrustedAccessibilityClient(true);
     void shell.openExternal(
       "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"
+    );
+  });
+
+  // Screen Recording — required for the Liquid glass backdrop capture.
+  ipcMain.handle(IPC.getScreenPermission, () =>
+    process.platform === "darwin"
+      ? systemPreferences.getMediaAccessStatus("screen") === "granted"
+      : true
+  );
+  ipcMain.handle(IPC.openScreenSettings, () => {
+    // Touch desktopCapturer to trigger the system prompt, then open the pane.
+    void desktopCapturer.getSources({ types: ["screen"], thumbnailSize: { width: 1, height: 1 } });
+    void shell.openExternal(
+      "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture"
     );
   });
 
@@ -322,7 +385,7 @@ app.whenReady().then(() => {
   const splash = createSplash();
   setTimeout(() => {
     if (!splash.isDestroyed()) splash.destroy();
-    if (!settings.configured) showSettings();
+    if (!settings.configured) showOnboarding();
   }, 2200);
 });
 

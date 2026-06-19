@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self';"
+    />
+    <title>Welcome to oioi</title>
+    <link rel="stylesheet" href="onboarding.css" />
+  </head>
+  <body>
+    <div id="ob">
+      <div class="dots">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span class="dot"></span><span class="dot"></span>
+      </div>
+
+      <div class="steps">
+        <!-- 0: welcome -->
+        <section class="step active">
+          <img class="ob-logo" src="../assets/app_icon.png" alt="oioi" />
+          <h1>Welcome to oioi</h1>
+          <p>Your clipboard, supercharged.<br />Let's set it up — 4 quick steps.</p>
+        </section>
+
+        <!-- 1: permissions -->
+        <section class="step">
+          <h2>Grant permissions</h2>
+          <p class="sub">Optional, but oioi works best with these. Click Grant, then flip oioi's switch in System Settings.</p>
+          <div class="perm" data-perm="acc">
+            <div class="perm-text"><b>Accessibility</b><span>Makes the global shortcut rock-solid</span></div>
+            <button class="grant" data-perm="acc">Grant</button>
+          </div>
+          <div class="perm" data-perm="screen">
+            <div class="perm-text"><b>Screen Recording</b><span>Needed only for Liquid glass blur</span></div>
+            <button class="grant" data-perm="screen">Grant</button>
+          </div>
+        </section>
+
+        <!-- 2: try shortcut -->
+        <section class="step">
+          <h2>Try the shortcut</h2>
+          <p class="sub">This is how you'll open oioi from anywhere.</p>
+          <div class="kbd-big">⌥&nbsp;V</div>
+          <div id="tryState" class="try-wait">Press&nbsp;⌥V now…</div>
+        </section>
+
+        <!-- 3: style -->
+        <section class="step">
+          <h2>Pick your look</h2>
+          <p class="sub">Open oioi (⌥V) after choosing to see it live.</p>
+          <div class="styles">
+            <button class="style-card" data-style="soft">
+              <span class="sc-title">Soft white</span>
+              <span class="sc-sub">Light &amp; instant · no permission</span>
+            </button>
+            <button class="style-card" data-style="glass">
+              <span class="sc-title">Liquid glass</span>
+              <span class="sc-sub">Blurs your desktop · needs Screen Recording</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- 4: done -->
+        <section class="step">
+          <div class="done-check">✓</div>
+          <h1>You're all set</h1>
+          <p>
+            Open oioi anytime with <span class="kbd">⌥V</span> or the menu-bar sloth.<br />
+            Tweak blur, corners &amp; more in <b>Settings</b>.
+          </p>
+        </section>
+      </div>
+
+      <div class="nav">
+        <button id="back" class="btn-ghost">Back</button>
+        <button id="next" class="btn-primary">Next</button>
+      </div>
+    </div>
+    <script src="onboarding.js"></script>
+  </body>
+</html>
