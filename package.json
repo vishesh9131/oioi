@@ -1,7 +1,7 @@
 {
   "name": "oioi-electron",
   "version": "0.4.0",
-  "description": "oioi — a macOS clipboard manager (Electron port of the native Swift app)",
+  "description": "oioi — a fast, glassy clipboard manager for macOS, Windows and Linux",
   "main": "dist/main/main.js",
   "author": "Vishesh",
   "license": "MIT",
@@ -10,7 +10,39 @@
     "typecheck": "tsc --noEmit",
     "start": "npm run build && env -u ELECTRON_RUN_AS_NODE electron .",
     "dev": "npm run build && env -u ELECTRON_RUN_AS_NODE electron . --enable-logging",
-    "dist": "env -u ELECTRON_RUN_AS_NODE node scripts/dist.mjs"
+    "dist": "env -u ELECTRON_RUN_AS_NODE node scripts/dist.mjs",
+    "dist:win": "npm run build && npx electron-builder --win",
+    "dist:linux": "npm run build && npx electron-builder --linux"
+  },
+  "build": {
+    "appId": "com.vishesh.oioi",
+    "productName": "oioi",
+    "files": [
+      "dist/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "mac": {
+      "icon": "assets/app_icon.png",
+      "category": "public.app-category.productivity"
+    },
+    "win": {
+      "icon": "assets/app_icon.png",
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "linux": {
+      "icon": "assets/app_icon.png",
+      "category": "Utility",
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    }
   },
   "devDependencies": {
     "@types/node": "^20.14.0",
