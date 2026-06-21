@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "description": "oioi — a fast, glassy clipboard manager for macOS, Windows and Linux",
   "main": "dist/main/main.js",
-  "author": "Vishesh",
+  "author": "Vishesh <vishesh9131@users.noreply.github.com>",
   "license": "MIT",
   "scripts": {
     "build": "node scripts/build.mjs",
@@ -11,8 +11,8 @@
     "start": "npm run build && env -u ELECTRON_RUN_AS_NODE electron .",
     "dev": "npm run build && env -u ELECTRON_RUN_AS_NODE electron . --enable-logging",
     "dist": "env -u ELECTRON_RUN_AS_NODE node scripts/dist.mjs",
-    "dist:win": "npm run build && npx electron-builder --win",
-    "dist:linux": "npm run build && npx electron-builder --linux"
+    "dist:win": "npm run build && npx electron-builder --win --publish never",
+    "dist:linux": "npm run build && npx electron-builder --linux --publish never"
   },
   "build": {
     "appId": "com.vishesh.oioi",
